@@ -16,3 +16,30 @@ The `sfdx-project.json` file contains useful configuration information for your 
 - [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
 - [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
 - [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+
+
+# Salesforce SFDX + GitHub + Jenkins
+
+## Branching Strategy
+- **main**: Production-ready, protected, requires PR + Jenkins build.
+- **develop**: Active development branch.
+
+## Branch Protection
+- No direct commits to main.
+- Require 1 reviewer for PR.
+- Require Jenkins build status check to pass.
+
+## Permissions
+- User A: Read-only
+- User B: Write (develop only, must PR to main).
+
+## Jenkins Integration
+- Webhook triggers Jenkins pipeline.
+- Pipeline runs static analysis + check-only deployment.
+
+## SFDX Notes
+- Use `sf project deploy start --checkonly` to validate metadata.
+- Resolve metadata conflicts locally before PRs.
+- Keep `sfdx-project.json` aligned with package directories.
+
+Added the webhook
