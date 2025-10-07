@@ -8,7 +8,7 @@ pipeline {
     tools {
         // You MUST configure a NodeJS tool in Jenkins > Manage Jenkins > Global Tool Configuration
         // with the name 'NodeJS 18.x' for this pipeline to work.
-        nodejs 'NodeJS 24.x'
+        nodejs 'NodeJS 18.x'
     }
     stages {
         stage('Checkout') {
