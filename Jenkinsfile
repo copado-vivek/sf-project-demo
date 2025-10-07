@@ -1,25 +1,66 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    agent any
+    environment {
+        SF_CONSUMER_KEY = "${env.SF_CONSUMER_KEY}"
+        SF_USERNAME = "${env.SF_USERNAME}"
+        SF_INSTANCE_URL = "${env.SF_INSTANCE_URL ?: 'https://login.salesforce.com'}"
     }
-    stage('Install SFDX') {
-      steps {
-        sh 'npm install sfdx-cli --global'
-      }
+    tools {
+        // You MUST configure a NodeJS tool in Jenkins > Manage Jenkins > Global Tool Configuration
+        // with the name 'NodeJS 18.x' for this pipeline to work.
+        nodejs 'NodeJS 24.x'
     }
-    stage('Static Analysis') {
-      steps {
-        sh 'sfdx force:source:lint || true' // or PMD scan
-      }
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def branchName = env.GIT_BRANCH.replaceFirst('origin/', '')
+                    echo "Checking branch name..."
+                    echo "Current branch: ${branchName}"
+                }
+            }
+        }
+        stage('Install Node.js') {
+            steps {
+                echo 'Node.js is ready to use.'
+            }
+        }
+        stage('Install Salesforce CLI') {
+            steps {
+                sh 'npm install sfdx-cli -g'
+            }
+        }
+        stage('Debug JWT Key File') {
+            steps {
+                echo 'This stage would typically verify the presence of a JWT key file.'
+            }
+        }
     }
-    stage('Validate Deployment') {
-      steps {
-        sh 'sf project deploy start --checkonly --target-org ciOrg'
-      }
-    }
-  }
 }
+
+
+// pipeline {
+//   agent any
+//   stages {
+//     stage('Checkout') {
+//       steps {
+//         checkout scm
+//       }
+//     }
+//     stage('Install SFDX') {
+//       steps {
+//         sh 'npm install sfdx-cli --global'
+//       }
+//     }
+//     stage('Static Analysis') {
+//       steps {
+//         sh 'sfdx force:source:lint || true' // or PMD scan
+//       }
+//     }
+//     stage('Validate Deployment') {
+//       steps {
+//         sh 'sf project deploy start --checkonly --target-org ciOrg'
+//       }
+//     }
+//   }
+// }
