@@ -37,10 +37,10 @@ pipeline {
         }
         stage('Authorize Salesforce Org') {
             steps {
-                withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'server_key_file')]) {
+                withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'sf-jwt-key')]) {
                     sh '''
                         echo "***************************************"
-                        cat "${server_key_file}"
+                        cat "${sf-jwt-key}"
                         echo "***************************************"
                     '''
 
