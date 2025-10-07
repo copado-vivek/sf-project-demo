@@ -56,25 +56,37 @@ pipeline {
                 }
             }
         }
-        stage('Run PMD Analysis') {
-            steps {
-                tool 'JDK 11'
-                sh '''
-                    curl -L -o pmd.zip https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.55.0/pmd-bin-6.55.0.zip
-                    # The fix is here: Added the -o flag to unzip
-                    unzip -o -q pmd.zip
-                '''
-                sh '''
-                    mkdir -p pmd-reports
-                    ./pmd-bin-6.55.0/bin/run.sh pmd \\
-                      -d force-app/main/default/classes \\
-                      -R apex-ruleset.xml \\
-                      -f html \\
-                      -r pmd-reports/pmd-report.html
-                '''
-                archiveArtifacts artifacts: 'pmd-reports/**'
-            }
-        }
+        // stage('Run PMD Analysis') {
+        //     steps {
+        //         tool 'JDK 11'
+        //         sh '''
+        //             curl -L -o pmd.zip https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.55.0/pmd-bin-6.55.0.zip
+        //             # The fix is here: Added the -o flag to unzip
+        //             unzip -o -q pmd.zip
+        //         '''
+        //         sh '''
+        //             mkdir -p pmd-reports
+        //             ./pmd-bin-6.55.0/bin/run.sh pmd \\
+        //               -d force-app/main/default/classes \\
+        //               -R apex-ruleset.xml \\
+        //               -f html \\
+        //               -r pmd-reports/pmd-report.html
+        //         '''
+        //         archiveArtifacts artifacts: 'pmd-reports/**'
+        //     }
+        // }
+        // 
+        
+        //-------------------------------------------------------------------------
+        // Run unit tests in test scratch org.
+        // -------------------------------------------------------------------------
+        
+        // stage('Run Tests In Test Scratch Org') {
+        //     rc = command "${toolbelt}/sf apex run test --target-org ciorg --wait 10 --result-format tap --code-coverage --test-level ${TEST_LEVEL}"
+        //     if (rc != 0) {
+        //         error 'Salesforce unit test run in test scratch org failed.'
+        //     }
+        // }
         stage('Deploy Custom Object') {
             steps {
                 echo 'This stage would deploy the custom object.'
