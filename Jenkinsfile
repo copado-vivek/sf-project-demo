@@ -27,7 +27,6 @@ pipeline {
         }
         stage('Install Salesforce CLI') {
             steps {
-                //sh 'npm install sfdx-cli -g'
                 sh 'npm install --global @salesforce/cli'
                 sh 'sf --version'
             }
