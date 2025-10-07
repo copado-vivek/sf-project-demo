@@ -87,17 +87,14 @@ pipeline {
         //         error 'Salesforce unit test run in test scratch org failed.'
         //     }
         // }
-        stage('Deploy Custom Object') {
+        stage('Deploy to Salesforce') {
             steps {
-                echo 'This stage would deploy the custom object.'
-                sh 'mkdir -p toDeploy'
-                sh 'sfdx force:source:convert -d toDeploy -x manifest/package.xml'
                 sh '''
-                    sfdx force:mdapi:deploy \\
-                      -u ''' + SF_USERNAME + ''' \\
-                      -d ./toDeploy \\
-                      -l NoTestRun \\
-                      -w 10
+                    sf project deploy start \
+                      --target-org ${SF_USERNAME} \
+                      --metadata-dir ./toDeploy \
+                      --test-level NoTestRun \
+                      --wait 10
                 '''
             }
         }
