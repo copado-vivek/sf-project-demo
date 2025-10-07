@@ -8,7 +8,7 @@ pipeline {
     tools {
         // You MUST configure a NodeJS tool in Jenkins > Manage Jenkins > Global Tool Configuration
         // with the name 'NodeJS 18.x' for this pipeline to work.
-        nodejs 'NodeJS 18.x'
+        nodejs 'NodeJS 24.x'
     }
     stages {
         stage('Checkout') {
@@ -27,7 +27,9 @@ pipeline {
         }
         stage('Install Salesforce CLI') {
             steps {
-                sh 'npm install sfdx-cli -g'
+                //sh 'npm install sfdx-cli -g'
+                sh 'npm install --global @salesforce/cli'
+                sh 'sf --version'
             }
         }
         stage('Debug JWT Key File') {
