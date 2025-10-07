@@ -35,6 +35,25 @@ pipeline {
                 echo 'This stage would typically verify the presence of a JWT key file.'
             }
         }
+        stage('Authorize Salesforce Org') {
+            steps {
+                withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'server_key_file')]) {
+                    sh '''
+                        echo "***************************************"
+                        cat "${server_key_file}"
+                        echo "***************************************"
+                    '''
+
+                    sh '''
+                        sfdx force:auth:jwt:grant \\
+                          --clientid ''' + SF_CONSUMER_KEY + ''' \\
+                          --jwtkeyfile ''' + sf-jwt-key + ''' \\
+                          --username ''' + SF_USERNAME + ''' \\
+                          --instanceurl ''' + SF_INSTANCE_URL + '''
+                    '''
+                }
+            }
+        }
     }
 }
 
