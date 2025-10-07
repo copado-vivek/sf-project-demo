@@ -37,17 +37,17 @@ pipeline {
         }
         stage('Authorize Salesforce Org') {
             steps {
-                withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'sf-jwt-key')]) {
+                withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'server_key_file')]) {
                     sh '''
                         echo "***************************************"
-                        cat "${sf-jwt-key}"
+                        cat "${server_key_file}"
                         echo "***************************************"
                     '''
 
                     sh '''
                         sfdx force:auth:jwt:grant \\
                           --clientid ''' + SF_CONSUMER_KEY + ''' \\
-                          --jwtkeyfile ''' + sf-jwt-key + ''' \\
+                          --jwtkeyfile ''' + server_key_file + ''' \\
                           --username ''' + SF_USERNAME + ''' \\
                           --instanceurl ''' + SF_INSTANCE_URL + '''
                     '''
