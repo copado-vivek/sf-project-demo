@@ -56,6 +56,39 @@ pipeline {
                 }
             }
         }
+        stage('Run PMD Analysis') {
+            steps {
+                tool 'JDK 11'
+                sh '''
+                    curl -L -o pmd.zip https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.55.0/pmd-bin-6.55.0.zip
+                    # The fix is here: Added the -o flag to unzip
+                    unzip -o -q pmd.zip
+                '''
+                sh '''
+                    mkdir -p pmd-reports
+                    ./pmd-bin-6.55.0/bin/run.sh pmd \\
+                      -d force-app/main/default/classes \\
+                      -R apex-ruleset.xml \\
+                      -f html \\
+                      -r pmd-reports/pmd-report.html
+                '''
+                archiveArtifacts artifacts: 'pmd-reports/**'
+            }
+        }
+        stage('Deploy Custom Object') {
+            steps {
+                echo 'This stage would deploy the custom object.'
+                sh 'mkdir -p toDeploy'
+                sh 'sfdx force:source:convert -d toDeploy -x manifest/package.xml'
+                sh '''
+                    sfdx force:mdapi:deploy \\
+                      -u ''' + SF_USERNAME + ''' \\
+                      -d ./toDeploy \\
+                      -l NoTestRun \\
+                      -w 10
+                '''
+            }
+        }
     }
     post {
         failure {
