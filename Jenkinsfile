@@ -75,18 +75,6 @@ pipeline {
         //         archiveArtifacts artifacts: 'pmd-reports/**'
         //     }
         // }
-        // 
-        
-        //-------------------------------------------------------------------------
-        // Run unit tests in test scratch org.
-        // -------------------------------------------------------------------------
-        
-        // stage('Run Tests In Test Scratch Org') {
-        //     rc = command "${toolbelt}/sf apex run test --target-org ciorg --wait 10 --result-format tap --code-coverage --test-level ${TEST_LEVEL}"
-        //     if (rc != 0) {
-        //         error 'Salesforce unit test run in test scratch org failed.'
-        //     }
-        // }
         stage('Deploy to Salesforce') {
             steps {
                 sh '''
@@ -108,30 +96,3 @@ pipeline {
         }
     }
 }
-
-
-// pipeline {
-//   agent any
-//   stages {
-//     stage('Checkout') {
-//       steps {
-//         checkout scm
-//       }
-//     }
-//     stage('Install SFDX') {
-//       steps {
-//         sh 'npm install sfdx-cli --global'
-//       }
-//     }
-//     stage('Static Analysis') {
-//       steps {
-//         sh 'sfdx force:source:lint || true' // or PMD scan
-//       }
-//     }
-//     stage('Validate Deployment') {
-//       steps {
-//         sh 'sf project deploy start --checkonly --target-org ciOrg'
-//       }
-//     }
-//   }
-// }
