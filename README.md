@@ -41,3 +41,5 @@ The `sfdx-project.json` file contains useful configuration information for your 
 - Use `sf project deploy start --checkonly` to validate metadata.
 - Resolve metadata conflicts locally before PRs.
 - Keep `sfdx-project.json` aligned with package directories.
+
+hello
