@@ -42,4 +42,4 @@ The `sfdx-project.json` file contains useful configuration information for your 
 - Resolve metadata conflicts locally before PRs.
 - Keep `sfdx-project.json` aligned with package directories.
 
-Checking..
+Checking....
