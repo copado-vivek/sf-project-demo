@@ -40,9 +40,9 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'SF_SERVER_KEY', variable: 'server_key_file')]) {
                     sh '''
-                        echo "***************************************"
+                        echo "*****************************************"
                         cat "${server_key_file}"
-                        echo "***************************************"
+                        echo "*****************************************"
                     '''
 
                     sh '''
